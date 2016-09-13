@@ -1,5 +1,13 @@
 import React from 'react';
 
+const style = {
+    image: {
+    height: 300,
+    width: 500,
+    }
+}
+
+
 class DayItem extends React.Component {
   render() {
     console.log('class DayItem: ', this.props);
@@ -11,8 +19,11 @@ class DayItem extends React.Component {
             <p>{this.props.body}</p>
             <p>User: {this.props.user}</p>
             <p>
-              <a href={this.props.url}>Read article</a>
+              <a href={this.props.url}>Read day</a>
             </p>
+            <div>
+              <img style={ style.image }src={this.props.picture} />
+            </div>
           </div>
         </div>
     );
