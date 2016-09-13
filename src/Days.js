@@ -11,7 +11,7 @@ class Days extends React.Component {
   }
 
   componentDidMount() {
-    $.get("https://afternoon-crag-73536.herokuapp.com/days.json", (function(data){
+    $.get("https://secure-dusk-69363.herokuapp.com/days.json", (function(data){
       this.setState({
         days: data.days,
       });
@@ -29,7 +29,7 @@ class Days extends React.Component {
       console.log('newday:', newDay)
       $.ajax({
         type: "POST",
-        url: "https://afternoon-crag-73536.herokuapp.com/days.json",
+        url: "https://secure-dusk-69363.herokuapp.com/days.json",
         data: JSON.stringify({
           day: newDay
         }),
@@ -46,18 +46,21 @@ class Days extends React.Component {
     }
 
   renderDayItem(item, index) {
-    console.log('renderDay:',item);
 
     // // Get the image from the HTML content snippet
     // var content = $("<div/>").html(item.content);
     // var image = $("img", content).attr("src");
     //
+    let picture = item.pictures[0].image.url
+    console.log('renderDay:', picture);
+
     return (
       <DayItem
         key={index}
         user={item.user.email}
         title={item.title}
         body={item.body}
+        picture={picture}
         // author={item.author}
         // publishedDate={item.publishedDate}
         url={item.url} />
