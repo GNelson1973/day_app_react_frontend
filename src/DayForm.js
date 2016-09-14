@@ -2,16 +2,35 @@ import React from 'react';
 import $ from 'jquery';
 import Days from './Days';
 
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import DatePicker from 'material-ui/DatePicker';
+
+const dialogStyle = {
+  width: '700px',
+  height: '500px',
+  margin: '50px auto',
+  padding: '2rem',
+}
+
+const buttonStyle = {
+  float: 'right',
+  marginLeft: '2rem',
+}
+
+
 class DayForm extends React.Component {
 
   createDay(event){
       event.preventDefault();
-
+      const { title, body, rating, day_date,  } = this.formValues()
       let newDay = {
-        title: this.refs.title.value,
-        body: this.refs.body.value,
-        rating: this.refs.rating.value,
-        day_date: this.refs.day_date.value
+        title: title,
+        body: body,
+        rating: rating,
+        day_date: day_date
       };
       console.log('newday:', newDay)
       $.ajax({
@@ -24,31 +43,45 @@ class DayForm extends React.Component {
         dataType: "json"
 
       }).done(function( data ) {
-        console.log(data);
-        alert( "Data saved: " + data );
+        alert( "Data saved: " + data.day_date );
 
       }).fail(function(error) {
         console.log(error);
       });
     }
 
+  formValues() {
+    const { title, body, day_date, rating } = this.refs
+    return {
+      title: title.getValue(),
+      body: body.getValue(),
+      day_date: day_date.getValue(),
+      rating: rating.getValue(),
+    }
+  }
+
   render() {
+
     return (
       <div>
-          <form onSubmit={this.createDay.bind(this)}>
-            <input type="text" className="form-control" ref="title" placeholder="Give your day an inspirational title" />
-            <textarea className="form-control" ref="body" placeholder="Describe your day.."></textarea>
-            <input type="date" className="form-control" ref="day_date" />
-            <input type="number" className="form-control" ref="rating" placeholder="Give your day rating" />
-            <button type="submit" className="btn btn-primary">Create Day</button>
-          </form>
+        <Paper style={ dialogStyle }>
           <div>
-
+            <TextField name="title" ref="title" hintText="Give an inspirational title" />
           </div>
+          <div>
+            <TextField name="body" ref="body" hintText="Describe your day.." />
+          </div>
+            <TextField name="day_date" type="date" ref="day_date" />
+          <div>
+            <TextField name="number" type="number" ref="rating" hintText="Give your day rating" />
+          </div>
+          <div>
+            <RaisedButton onTouchTap={this.createDay.bind(this)} label="Create your day" primary={true}/>
+          </div>
+        </Paper>
       </div>
     )
   }
-
 }
 
 export default DayForm;
