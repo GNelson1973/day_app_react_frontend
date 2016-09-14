@@ -14,15 +14,13 @@ class DayItem extends React.Component {
 
     const cts = this.props.date
     const cdate = (new Date(cts)).toString();
-    // return (
-    //   ...
-    //   <span ...>{ cdate }</span>
 
     return (
         <div>
           <div>
             <h2>Title {this.props.title}</h2>
             <p>{cdate}</p>
+            <p>Day rating: {this.props.rating}</p>
             <div>
               <img style={ style.image }src={this.props.image.image.url} />
             </div>
