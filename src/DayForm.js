@@ -32,13 +32,17 @@ class DayForm extends React.Component {
     super(props);
 
     this.state = {
-      files: []
+      files: [],
+      created: false
     };
   }
 
   createDay(e){
       e.preventDefault();
 
+      this.setState({
+        created: !this.state.created
+      })
       let req = request
         .post(`http://localhost:3000/days.json`)
 
@@ -64,14 +68,14 @@ class DayForm extends React.Component {
 
     }
 
-    onDrop(files) {
-      console.log('Received files: ', files);
-      this.setState({
-        files: files
-      });
-    }
+  onDrop(files) {
+    console.log('Received files: ', files);
+    this.setState({
+      files: files
+    });
+  }
 
-  render() {
+  renderForm(){
     let today = new Date();
     let dd = today.getDate();
     let mm = today.getMonth()+1; //January is 0!
@@ -86,41 +90,49 @@ class DayForm extends React.Component {
     }
 
     let Currday = dd+'-'+mm+'-'+yyyy;
+    return (
+      <Paper style={ dialogStyle }>
+        <h1>{Currday}</h1>
+        <div>
+          <TextField name="day_date" type="date" ref="day_date" />
+        </div>
+        <div>
+          <TextField name="title" ref="title" hintText="Give an inspirational title" />
+        </div>
+        <div>
+          <TextField name="number" type="number" ref="rating" hintText="Give your day rating" />
+        </div>
+          <Divider />
+        <div>
+          <TextField name="body" ref="body" hintText="Describe your day.."
+          multiLine={true}
+          rows={8}
+          rowsMax={25}
+          fullWidth={true}/>
+        </div>
+          <Divider />
+        <div>
+          <RaisedButton style={buttonStyle} onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
+        </div>
+        <div style={dropping}>
+          <Dropzone
+            accept="image/*"
+            multiple={false}
+            onDrop={this.onDrop.bind(this)}
+          >
+            <p>Click or drag an image to add to your day.</p>
+          </Dropzone>
+        </div>
+      </Paper>
+    )
+  }
 
+  render() {
+    const { created } = this.state
+    console.log(created)
     return (
       <div>
-        <Paper style={ dialogStyle }>
-          <h1>{Currday}</h1>
-          <div>
-            <TextField name="day_date" type="date" ref="day_date" />
-          </div>
-          <div>
-            <TextField name="title" ref="title" hintText="Give an inspirational title" />
-          </div>
-          <div>
-            <TextField name="number" type="number" ref="rating" hintText="Give your day rating" />
-          </div>
-          <div>
-            <TextField name="body" ref="body" hintText="Describe your day.."
-            multiLine={true}
-            rows={8}
-            rowsMax={25}
-            fullWidth={true}/>
-          </div>
-            <Divider />
-          <div>
-            <RaisedButton style={buttonStyle} onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
-          </div>
-          <div style={dropping}>
-            <Dropzone
-              accept="image/*"
-              multiple={false}
-              onDrop={this.onDrop.bind(this)}
-            >
-              <p>Click or drag an image to add to your day.</p>
-            </Dropzone>
-          </div>
-        </Paper>
+        { created ? <Days /> : this.renderForm() }
       </div>
     )
   }
