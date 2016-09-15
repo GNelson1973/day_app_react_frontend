@@ -76,7 +76,7 @@ class DayForm extends React.Component {
             <TextField name="number" type="number" ref="rating" hintText="Give your day rating" />
           </div>
           <div>
-            <RaisedButton onTouchTap={this.createDay.bind(this)} label="Create your day" primary={true}/>
+            <RaisedButton onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
           </div>
         </Paper>
       </div>
