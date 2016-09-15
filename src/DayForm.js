@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import Days from './Days';
+
 import Dropzone from 'react-dropzone'
 import request from 'superagent';
 
@@ -8,6 +9,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider';
+import {cyan500} from 'material-ui/styles/colors';
 import DatePicker from 'material-ui/DatePicker';
 
 const dialogStyle = {
@@ -19,12 +21,21 @@ const dialogStyle = {
 
 const buttonStyle = {
   float: 'right',
-  marginLeft: '2rem',
   marginTop: '1rem',
 }
 
 const dropping = {
-    marginTop: '1rem',
+  marginTop: '1rem',
+  marginLeft: '12rem',
+  textAlign: 'center',
+};
+
+const dragText = {
+    textAlign: 'center',
+    color: cyan500,
+    fontSize: 20,
+    lineHeight: .2,
+    paddingTop: 20,
 };
 
 class DayForm extends React.Component {
@@ -91,7 +102,7 @@ class DayForm extends React.Component {
 
     let Currday = dd+'-'+mm+'-'+yyyy;
     return (
-      <Paper style={ dialogStyle }>
+      <Paper style={ dialogStyle } zDepth={4}>
         <h1>{Currday}</h1>
         <div>
           <TextField name="day_date" type="date" ref="day_date" />
@@ -114,13 +125,15 @@ class DayForm extends React.Component {
         <div>
           <RaisedButton style={buttonStyle} onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
         </div>
-        <div style={dropping}>
+        <div style={dropping} >
           <Dropzone
             accept="image/*"
             multiple={false}
             onDrop={this.onDrop.bind(this)}
           >
-            <p>Click or drag an image to add to your day.</p>
+            <div style={dragText}>
+              <p>Click or drag</p><br/><p>an image</p><br/><p>to your day</p>
+            </div>
           </Dropzone>
         </div>
       </Paper>
