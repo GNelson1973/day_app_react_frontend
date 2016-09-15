@@ -51,7 +51,7 @@ class DayForm extends React.Component {
       req.field('day[title]', this.refs.title.getValue())
           .field('day[body]', this.refs.body.getValue())
           .field('day[day_date]', this.refs.day_date.getValue())
-          .field('day[rate]', this.refs.rate.getValue())
+          .field('day[rating]', this.refs.rating.getValue())
           .end((err, response) => {
             if (response.ok) {
               console.log(response.body)
