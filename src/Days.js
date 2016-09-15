@@ -11,7 +11,7 @@ class Days extends React.Component {
   }
 
   componentDidMount() {
-    $.get("https://secure-dusk-69363.herokuapp.com/days.json", (function(data){
+    $.get("http://localhost:3000/days.json", (function(data){
       this.setState({
         days: data.days,
       });
@@ -19,50 +19,18 @@ class Days extends React.Component {
     }).bind(this));
   }
 
-  createDay(event){
-      event.preventDefault();
-
-      let newDay = {
-        title: this.refs.title.value,
-        body: this.refs.body.value
-      };
-      console.log('newday:', newDay)
-      $.ajax({
-        type: "POST",
-        url: "https://secure-dusk-69363.herokuapp.com/days.json",
-        data: JSON.stringify({
-          day: newDay
-        }),
-        contentType: "application/json",
-        dataType: "json"
-
-      }).done(function( data ) {
-        console.log(data);
-        alert( "Data saved: " + data );
-
-      }).fail(function(error) {
-        console.log(error);
-      });
-    }
-
   renderDayItem(item, index) {
-
-    // // Get the image from the HTML content snippet
-    // var content = $("<div/>").html(item.content);
-    // var image = $("img", content).attr("src");
-    //
-    let picture = item.pictures[0].image.url
-    console.log('renderDay:', picture);
+    console.log('renderDay:', item);
 
     return (
       <DayItem
         key={index}
-        user={item.user.email}
+        date={item.date}
+        rating={item.rating}
+        image={item.image}
         title={item.title}
         body={item.body}
-        picture={picture}
-        // author={item.author}
-        // publishedDate={item.publishedDate}
+        pictures={item.pictures}
         url={item.url} />
     );
   }
@@ -72,11 +40,6 @@ class Days extends React.Component {
 
     return (
       <div>
-          <form onSubmit={this.createDay.bind(this)}>
-            <input type="text" className="form-control" ref="title" placeholder="Give your day an inspirational title" />
-            <textarea className="form-control" ref="body" placeholder="Describe your day.."></textarea>
-            <button type="submit" className="btn btn-primary">Create Day</button>
-          </form>
           <ul>
             <div>
               {days.map(this.renderDayItem.bind(this))}
