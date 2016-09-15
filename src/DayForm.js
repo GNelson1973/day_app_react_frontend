@@ -1,16 +1,18 @@
 import React from 'react';
 import $ from 'jquery';
 import Days from './Days';
+import Dropzone from 'react-dropzone'
+import request from 'superagent';
 
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import FlatButton from 'material-ui/FlatButton'
+import Divider from 'material-ui/Divider';
 import DatePicker from 'material-ui/DatePicker';
 
 const dialogStyle = {
   width: '700px',
-  height: '500px',
+  height: '800px',
   margin: '50px auto',
   padding: '2rem',
 }
@@ -18,65 +20,105 @@ const dialogStyle = {
 const buttonStyle = {
   float: 'right',
   marginLeft: '2rem',
+  marginTop: '1rem',
 }
 
+const dropping = {
+    marginTop: '1rem',
+};
 
 class DayForm extends React.Component {
+  constructor(props) {
+    super(props);
 
-  createDay(event){
-      event.preventDefault();
-      const { title, body, rating, day_date,  } = this.formValues()
-      let newDay = {
-        title: title,
-        body: body,
-        rating: rating,
-        day_date: day_date
-      };
-      console.log('newday:', newDay)
-      $.ajax({
-        type: "POST",
-        url: "http://localhost:3000/days.json",
-        data: JSON.stringify({
-          day: newDay
-        }),
-        contentType: "application/json",
-        dataType: "json"
+    this.state = {
+      files: []
+    };
+  }
 
-      }).done(function( data ) {
-        alert( "Data saved: " + data.day_date );
+  createDay(e){
+      e.preventDefault();
 
-      }).fail(function(error) {
-        console.log(error);
+      let req = request
+        .post(`http://localhost:3000/days.json`)
+
+      console.log('files; ', this.state.files)
+
+      this.state.files.forEach((file) => {
+        req.attach('day[image]', file)
+        })
+
+      req.field('day[title]', this.refs.title.getValue())
+          .field('day[body]', this.refs.body.getValue())
+          .field('day[day_date]', this.refs.day_date.getValue())
+          .field('day[rate]', this.refs.rate.getValue())
+          .end((err, response) => {
+            if (response.ok) {
+              console.log(response.body)
+            }
+
+            if (err) {
+              console.error(err)
+            }
+          })
+
+    }
+
+    onDrop(files) {
+      console.log('Received files: ', files);
+      this.setState({
+        files: files
       });
     }
 
-  formValues() {
-    const { title, body, day_date, rating } = this.refs
-    return {
-      title: title.getValue(),
-      body: body.getValue(),
-      day_date: day_date.getValue(),
-      rating: rating.getValue(),
-    }
-  }
-
   render() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+
+    if(mm<10) {
+        mm='0'+mm
+    }
+
+    let Currday = dd+'-'+mm+'-'+yyyy;
 
     return (
       <div>
         <Paper style={ dialogStyle }>
+          <h1>{Currday}</h1>
+          <div>
+            <TextField name="day_date" type="date" ref="day_date" />
+          </div>
           <div>
             <TextField name="title" ref="title" hintText="Give an inspirational title" />
           </div>
           <div>
-            <TextField name="body" ref="body" hintText="Describe your day.." />
-          </div>
-            <TextField name="day_date" type="date" ref="day_date" />
-          <div>
             <TextField name="number" type="number" ref="rating" hintText="Give your day rating" />
           </div>
           <div>
-            <RaisedButton onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
+            <TextField name="body" ref="body" hintText="Describe your day.."
+            multiLine={true}
+            rows={8}
+            rowsMax={25}
+            fullWidth={true}/>
+          </div>
+            <Divider />
+          <div>
+            <RaisedButton style={buttonStyle} onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
+          </div>
+          <div style={dropping}>
+            <Dropzone
+              accept="image/*"
+              multiple={false}
+              onDrop={this.onDrop.bind(this)}
+            >
+              <p>Click or drag an image to add to your day.</p>
+            </Dropzone>
           </div>
         </Paper>
       </div>
