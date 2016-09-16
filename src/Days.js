@@ -25,7 +25,8 @@ class Days extends React.Component {
     return (
       <DayItem
         key={index}
-        date={item.date}
+        id={item.id}
+        date={item.day_date}
         rating={item.rating}
         image={item.image}
         title={item.title}
