@@ -20,7 +20,7 @@ const paperStyle = {
 const dialogStyle = {
   width: '700px',
   height: '800px',
-  margin: '-40px auto',
+  margin: '-100px auto',
   padding: '2rem',
 }
 
@@ -29,9 +29,14 @@ const buttonStyle = {
   marginTop: '1rem',
 }
 
-const flatbuttonStyle = {
+const CreateButton = {
   marginTop: '1rem',
   marginLeft: '1.5rem',
+}
+
+const HistoryButton = {
+  marginTop: '5rem',
+  marginLeft: '51rem',
 }
 
 const dropping = {
@@ -163,10 +168,11 @@ class DayForm extends React.Component {
     console.log(created)
     return (
       <div>
-        <div style={flatbuttonStyle}>
+        <div style={created ? CreateButton : HistoryButton }>
           <FlatButton
             onClick={this.showDays.bind(this)}
-            label={ created ? 'Create your day' : 'See history overview' } primary={true}/>
+            label={ created ? 'Create your day' : 'See history overview' }
+            primary={true}/>
           </div>
         { created ? <Days /> : this.renderForm() }
       </div>
