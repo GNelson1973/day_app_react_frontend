@@ -8,20 +8,30 @@ import request from 'superagent';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import {cyan500} from 'material-ui/styles/colors';
 import DatePicker from 'material-ui/DatePicker';
 
+const paperStyle = {
+  marginTop: 10,
+}
+
 const dialogStyle = {
   width: '700px',
   height: '800px',
-  margin: '50px auto',
+  margin: '-40px auto',
   padding: '2rem',
 }
 
 const buttonStyle = {
   float: 'right',
   marginTop: '1rem',
+}
+
+const flatbuttonStyle = {
+  marginTop: '1rem',
+  marginLeft: '1.5rem',
 }
 
 const dropping = {
@@ -102,42 +112,50 @@ class DayForm extends React.Component {
 
     let Currday = dd+'-'+mm+'-'+yyyy;
     return (
-      <Paper style={ dialogStyle } zDepth={4}>
-        <h1>{Currday}</h1>
-        <div>
-          <TextField name="day_date" type="date" ref="day_date" />
-        </div>
-        <div>
-          <TextField name="title" ref="title" hintText="Give an inspirational title" />
-        </div>
-        <div>
-          <TextField name="number" type="number" ref="rating" hintText="Give your day rating" />
-        </div>
-          <Divider />
-        <div>
-          <TextField name="body" ref="body" hintText="Describe your day.."
-          multiLine={true}
-          rows={8}
-          rowsMax={25}
-          fullWidth={true}/>
-        </div>
-          <Divider />
-        <div>
-          <RaisedButton style={buttonStyle} onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
-        </div>
-        <div style={dropping} >
-          <Dropzone
-            accept="image/*"
-            multiple={false}
-            onDrop={this.onDrop.bind(this)}
-          >
-            <div style={dragText}>
-              <p>Click or drag</p><br/><p>an image</p><br/><p>to your day</p>
-            </div>
-          </Dropzone>
-        </div>
-      </Paper>
+      <div style={paperStyle}>
+        <Paper style={ dialogStyle } zDepth={4}>
+          <h1>{Currday}</h1>
+          <div>
+            <TextField name="day_date" type="date" ref="day_date" />
+          </div>
+          <div>
+            <TextField name="title" ref="title" hintText="Give an inspirational title" />
+          </div>
+          <div>
+            <TextField name="number" type="number" ref="rating" hintText="Give your day rating" />
+          </div>
+            <Divider />
+          <div>
+            <TextField name="body" ref="body" hintText="Describe your day.."
+            multiLine={true}
+            rows={8}
+            rowsMax={25}
+            fullWidth={true}/>
+          </div>
+            <Divider />
+          <div>
+            <RaisedButton style={buttonStyle} onClick={this.createDay.bind(this)} label="Create your day" primary={true}/>
+          </div>
+          <div style={dropping} >
+            <Dropzone
+              accept="image/*"
+              multiple={true}
+              onDrop={this.onDrop.bind(this)}
+            >
+              <div style={dragText}>
+                <p>Click or drag</p><br/><p>an image</p><br/><p>to your day</p>
+              </div>
+            </Dropzone>
+          </div>
+        </Paper>
+      </div>
     )
+  }
+
+  showDays(){
+    this.setState({
+      created: !this.state.created
+    })
   }
 
   render() {
@@ -145,6 +163,11 @@ class DayForm extends React.Component {
     console.log(created)
     return (
       <div>
+        <div style={flatbuttonStyle}>
+          <FlatButton
+            onClick={this.showDays.bind(this)}
+            label={ created ? 'Create your day' : 'See history overview' } primary={true}/>
+          </div>
         { created ? <Days /> : this.renderForm() }
       </div>
     )
