@@ -69,10 +69,11 @@ class DayForm extends React.Component {
       this.setState({
         created: !this.state.created
       })
+      
       let req = request
         .post(`http://localhost:3000/days.json`)
 
-      console.log('files; ', this.state.files)
+      console.log('files; ', req)
 
       this.state.files.forEach((file) => {
         req.attach('day[image]', file)
