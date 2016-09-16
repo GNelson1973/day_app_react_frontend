@@ -9,8 +9,13 @@ const style = {
 
 
 class DayItem extends React.Component {
+  renderImage(){
+    if (this.props.image.image.url == null == true) {return}
+    return (<img style={ style.image }src={this.props.image.image.url} />)
+  }
+
   render() {
-    console.log('class DayItem: ', this.props);
+    console.log('class DayItem: ', this.props.image.image.url == null == true);
 
     const cts = this.props.date
     const cdate = (new Date(cts)).toString();
@@ -22,7 +27,7 @@ class DayItem extends React.Component {
             <p>{cdate}</p>
             <p>Day rating: {this.props.rating}</p>
             <div>
-              <img style={ style.image }src={this.props.image.image.url} />
+              { this.renderImage() }
             </div>
             <p>{this.props.body}</p>
             <p>
